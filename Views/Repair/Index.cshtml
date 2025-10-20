@@ -1,0 +1,43 @@
+@model IEnumerable<BusManager.Models.Repair>
+
+@{
+    ViewData["Title"] = "Автобусы на ремонте";
+    Layout = "_Layout";
+}
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Добавить ремонт</a>
+    }
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Описание</th>
+            <th>Дата ремонта</th>
+            <th>Стоимость</th>
+            <th>Номер автобуса</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var repair in Model)
+    {
+        <tr>
+            <td>@repair.Description</td>
+            <td>@repair.RepairDate.ToShortDateString()</td>
+            <td>@repair.Cost.ToString("C2", new System.Globalization.CultureInfo("ru-RU"))</td>
+            <td>@repair.Bus?.Number</td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@repair.Id" class="btn btn-success btn-sm">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@repair.Id" class="btn btn-danger btn-sm">Удалить</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

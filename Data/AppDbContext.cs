@@ -12,8 +12,10 @@ namespace BusManager.Data
         }
 
         public DbSet<Bus> Buses { get; set; }
-        public DbSet<BusRoute> Routes { get; set; }
+        public DbSet<BusRoute> BusRoutes { get; set; }
         public DbSet<Part> Parts { get; set; }
         public DbSet<Repair> Repairs { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<SparePart> SpareParts { get; set; }
     }
 }

@@ -13,73 +13,88 @@ namespace BusManager.Controllers
             _context = context;
         }
 
-        // 📋 Список маршрутов
         public IActionResult Index()
         {
-            var routes = _context.Routes?.ToList() ?? new List<BusRoute>();
+            var routes = _context.BusRoutes.ToList();
             return View(routes);
         }
 
-        // ➕ Создание маршрута (страница)
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // 🧾 POST: Создание маршрута
         [HttpPost]
-        public IActionResult Create(BusRoute route)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(BusRoute route, IFormFile mapImage)
         {
             if (ModelState.IsValid)
             {
-                _context.Routes?.Add(route);
+                if (mapImage != null && mapImage.Length > 0)
+                {
+                    var fileName = Path.GetFileName(mapImage.FileName);
+                    var path = Path.Combine("wwwroot/uploads", fileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        mapImage.CopyTo(stream);
+                    }
+                    route.MapImagePath = "/uploads/" + fileName;
+                }
+
+                _context.BusRoutes.Add(route);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(route);
         }
 
-        // ✏️ Редактирование маршрута
         public IActionResult Edit(int id)
         {
-            var route = _context.Routes?.Find(id);
-            if (route == null)
-                return NotFound();
-
+            var route = _context.BusRoutes.Find(id);
+            if (route == null) return NotFound();
             return View(route);
         }
 
         [HttpPost]
-        public IActionResult Edit(BusRoute route)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(BusRoute route, IFormFile mapImage)
         {
             if (ModelState.IsValid)
             {
-                _context.Routes?.Update(route);
+                if (mapImage != null && mapImage.Length > 0)
+                {
+                    var fileName = Path.GetFileName(mapImage.FileName);
+                    var path = Path.Combine("wwwroot/uploads", fileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        mapImage.CopyTo(stream);
+                    }
+                    route.MapImagePath = "/uploads/" + fileName;
+                }
+
+                _context.BusRoutes.Update(route);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(route);
         }
 
-        // ❌ Удаление маршрута
+        // ✅ вот этот метод открывает страницу подтверждения удаления
         public IActionResult Delete(int id)
         {
-            var route = _context.Routes?.Find(id);
-            if (route == null)
-                return NotFound();
-
+            var route = _context.BusRoutes.Find(id);
+            if (route == null) return NotFound();
             return View(route);
         }
 
+        // ✅ а этот реально удаляет маршрут
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var route = _context.Routes?.Find(id);
-            if (route != null)
-            {
-                _context.Routes.Remove(route);
-                _context.SaveChanges();
-            }
+            var route = _context.BusRoutes.Find(id);
+            if (route == null) return NotFound();
+
+            _context.BusRoutes.Remove(route);
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

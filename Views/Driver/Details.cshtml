@@ -1,0 +1,16 @@
+@model BusManager.Models.Driver
+
+@{
+    ViewData["Title"] = "Детали водителя";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card p-3">
+    <p><strong>Имя:</strong> @Model.Name</p>
+    <p><strong>Телефон:</strong> @Model.Phone</p>
+    <p><strong>Номер лицензии:</strong> @Model.LicenseNumber</p>
+    <p><strong>Опыт (лет):</strong> @Model.ExperienceYears</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary mt-3">Назад</a>

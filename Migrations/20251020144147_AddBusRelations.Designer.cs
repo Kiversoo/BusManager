@@ -3,16 +3,19 @@ using System;
 using BusManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BusManager.Migrations.ApplicationDb
+namespace BusManager.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20251020144147_AddBusRelations")]
+    partial class AddBusRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
@@ -87,7 +90,13 @@ namespace BusManager.Migrations.ApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Driver")
+                    b.Property<int>("Capacity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -95,7 +104,18 @@ namespace BusManager.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("RouteId");
 
                     b.ToTable("Buses");
                 });
@@ -106,11 +126,20 @@ namespace BusManager.Migrations.ApplicationDb
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("BusId")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("DistanceKm")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("DriverId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("EndLocation")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -121,9 +150,12 @@ namespace BusManager.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Routes");
+                    b.ToTable("BusRoutes");
                 });
 
             modelBuilder.Entity("BusManager.Models.Driver", b =>
@@ -140,6 +172,10 @@ namespace BusManager.Migrations.ApplicationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -175,8 +211,12 @@ namespace BusManager.Migrations.ApplicationDb
                     b.Property<int>("BusId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Cost")
-                        .HasColumnType("REAL");
+                    b.Property<string>("BusNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
@@ -185,11 +225,35 @@ namespace BusManager.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("RepairDate")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BusId");
 
                     b.ToTable("Repairs");
+                });
+
+            modelBuilder.Entity("BusManager.Models.SparePart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpareParts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -267,11 +331,9 @@ namespace BusManager.Migrations.ApplicationDb
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -309,11 +371,9 @@ namespace BusManager.Migrations.ApplicationDb
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
@@ -324,15 +384,28 @@ namespace BusManager.Migrations.ApplicationDb
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BusManager.Models.Bus", b =>
+                {
+                    b.HasOne("BusManager.Models.Driver", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("BusManager.Models.BusRoute", "Route")
+                        .WithMany()
+                        .HasForeignKey("RouteId");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Route");
+                });
+
             modelBuilder.Entity("BusManager.Models.Repair", b =>
                 {
-                    b.HasOne("BusManager.Models.Bus", "Bus")
-                        .WithMany()
+                    b.HasOne("BusManager.Models.Bus", null)
+                        .WithMany("Repairs")
                         .HasForeignKey("BusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Bus");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -384,6 +457,11 @@ namespace BusManager.Migrations.ApplicationDb
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BusManager.Models.Bus", b =>
+                {
+                    b.Navigation("Repairs");
                 });
 #pragma warning restore 612, 618
         }

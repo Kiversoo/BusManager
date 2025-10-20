@@ -251,6 +251,7 @@ C:\Users\shped\BusManager\obj\Debug\net8.0\BusManager.MvcApplicationPartsAssembl
 C:\Users\shped\BusManager\obj\Debug\net8.0\BusManager.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\shped\BusManager\obj\Debug\net8.0\BusManager.RazorAssemblyInfo.cache
 C:\Users\shped\BusManager\obj\Debug\net8.0\BusManager.RazorAssemblyInfo.cs
+C:\Users\shped\BusManager\obj\Debug\net8.0\BusManager.sourcelink.json
 C:\Users\shped\BusManager\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\shped\BusManager\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\shped\BusManager\obj\Debug\net8.0\staticwebassets\msbuild.BusManager.Microsoft.AspNetCore.StaticWebAssets.props

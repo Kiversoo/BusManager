@@ -1,0 +1,110 @@
+@model IEnumerable<BusManager.Models.BusRoute>
+
+@{
+    ViewData["Title"] = "Маршруты";
+    Layout = "_Layout";
+}
+
+<p class="text-center">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Добавить маршрут</a>
+    }
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название маршрута</th>
+            <th>Карта маршрута</th>
+            <th>Откуда</th>
+            <th>Куда</th>
+            <th>Дистанция (км)</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var route in Model)
+        {
+            <tr>
+                <td>@route.Name</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(route.MapImagePath))
+                    {
+                        <img src="@route.MapImagePath"
+                             alt="Карта маршрута"
+                             class="route-thumb"
+                             onclick="showImageModal('@route.MapImagePath')" />
+                    }
+                    else
+                    {
+                        <em>Без карты</em>
+                    }
+                </td>
+                <td>@route.StartLocation</td>
+                <td>@route.EndLocation</td>
+                <td>@route.DistanceKm</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@route.Id" class="btn btn-success btn-sm">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@route.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- 🔹 Модальное окно для просмотра карты -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <img id="modalImage" src="" alt="Карта маршрута" />
+</div>
+
+@section Scripts {
+    <script>
+        function showImageModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = src;
+            modal.style.display = 'flex';
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+    </script>
+
+    <style>
+        /* Миниатюра карты */
+        .route-thumb {
+            max-height: 80px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            box-shadow: 0 0 6px rgba(0,0,0,0.2);
+        }
+
+        .route-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+    </style>
+}

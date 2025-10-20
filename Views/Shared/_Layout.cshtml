@@ -11,94 +11,165 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BusManager.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+
+    <style>
+        /* 🌐 Верхняя панель */
+        .page-header {
+            background: linear-gradient(135deg, #4a90e2, #7bc8ff);
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 0 0 15px 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(74, 144, 226, 0.2);
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .page-header span.icon {
+            font-size: 2.3rem;
+            margin-right: 10px;
+        }
+
+        /* 🟥 Кнопка выхода */
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #e63b3b;
+        }
+       /* 🔙 Кнопка "Назад на главную" */
+        .back-btn {
+            position: absolute;
+            top: 15px;
+            left: 25px;
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            text-decoration: none;
+        }
+
+        main {
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        footer {
+            background: #f4faff;
+            color: #333;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
+
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BusManager</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    @{
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        string icon = "🚌"; // По умолчанию
+        string title = ViewData["Title"]?.ToString() ?? "";
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!-- 🔹 Главное меню -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Route" asp-action="Index">Маршруты</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Bus" asp-action="Index">Автобусы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Driver" asp-action="Index">Водители</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Repair" asp-action="Index">Ремонты</a>
-                        </li>
+        switch (controller)
+        {
+            case "Bus":
+                icon = "🚍";
+                break;
+            case "Driver":
+                icon = "👨‍✈️";
+                break;
+            case "Route":
+                icon = "🗺️";
+                break;
+            case "Repair":
+                icon = "🔧";
+                break;
+            case "Part":
+            case "SparePart":
+                icon = "⚙️";
+                break;
+            case "Admin":
+                icon = "💼";
+                break;
+            case "Home":
+                icon = "🚌";
+                break;
+        }
+    }
 
-                        @* 🔒 Меню администратора *@
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Администрирование
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="adminMenu">
-                                    <li><a class="dropdown-item" asp-controller="Bus" asp-action="Create">Добавить автобус</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Route" asp-action="Create">Добавить маршрут</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Driver" asp-action="Create">Добавить водителя</a></li>
-                                    <li><a class="dropdown-item" asp-controller="Repair" asp-action="Create">Добавить ремонт</a></li>
-                                    <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" asp-controller="Admin" asp-action="Index">Управление пользователями</a></li>
-                                </ul>
-                            </li>
-                        }
-                    </ul>
+    <div class="page-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            @if (controller != "Home")
+            {
+                <a asp-controller="Home" asp-action="Index" class="back-circle" title="Назад">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white">
+                        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </a>
+            }
 
-                    <!-- 🔹 Авторизация / Профиль -->
-                    <ul class="navbar-nav">
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Profile" asp-action="Index">
-                                    👤 Профиль (@User.Identity?.Name)
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="form-inline">
-                                    <button type="submit" class="btn btn-link nav-link text-dark">Выйти</button>
-                                </form>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Войти</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Регистрация</a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+            <h1 class="ms-3 mb-0 fw-bold">
+                <span class="icon">@icon</span> @title
+            </h1>
+        </div>
 
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <form asp-area="Identity" asp-page="/Account/Logout" method="post" class="d-inline">
+                <button type="submit" class="logout-btn">Выйти</button>
+            </form>
+        }
+    </div>
+</header>
+
+    <!-- ⬇️ Контейнер контента -->
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+    <!-- ⬆️ Обязательно нужен RenderBody -->
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - BusManager - <a asp-controller="Home" asp-action="Privacy">Политика конфиденциальности</a>
+            &copy; 2025 - BusManager —
+            <a asp-controller="Home" asp-action="Privacy">Политика конфиденциальности</a>
         </div>
     </footer>
 
@@ -108,3 +179,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

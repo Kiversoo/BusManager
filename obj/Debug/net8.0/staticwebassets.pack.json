@@ -245,6 +245,26 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\shped\\BusManager\\wwwroot\\uploads\\a21a392d-3895-49fd-be83-35390b2849d8.jpg",
+      "PackagePath": "staticwebassets\\uploads\\a21a392d-3895-49fd-be83-35390b2849d8.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shped\\BusManager\\wwwroot\\uploads\\c9f676fd-d8a6-40a2-8540-8b7a4dffb556.jpg",
+      "PackagePath": "staticwebassets\\uploads\\c9f676fd-d8a6-40a2-8540-8b7a4dffb556.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shped\\BusManager\\wwwroot\\uploads\\d2de7496-a9ed-4927-a6f9-cc214f6b6f75.jpg",
+      "PackagePath": "staticwebassets\\uploads\\d2de7496-a9ed-4927-a6f9-cc214f6b6f75.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shped\\BusManager\\wwwroot\\uploads\\images.jpg",
+      "PackagePath": "staticwebassets\\uploads\\images.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shped\\BusManager\\wwwroot\\uploads\\tmb_38549_9785.jpg",
+      "PackagePath": "staticwebassets\\uploads\\tmb_38549_9785.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.BusManager.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

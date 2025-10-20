@@ -1,0 +1,33 @@
+@model BusManager.Models.BusRoute
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h2>Добавить маршрут</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="form-label">Название маршрута</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="StartLocation" class="form-label">Откуда</label>
+        <input asp-for="StartLocation" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="EndLocation" class="form-label">Куда</label>
+        <input asp-for="EndLocation" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="DistanceKm" class="form-label">Дистанция (км)</label>
+        <input asp-for="DistanceKm" class="form-control" type="number" step="0.1" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="mapImage" class="form-label">Карта маршрута (изображение)</label>
+        <input type="file" name="mapImage" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Сохранить</button>
+</form>

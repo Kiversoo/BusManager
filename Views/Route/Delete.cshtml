@@ -2,30 +2,49 @@
 
 @{
     ViewData["Title"] = "Удалить маршрут";
+    Layout = "_Layout";
 }
 
-<h2>Удалить маршрут</h2>
+<div class="delete-container text-center mt-5">
+    <h2 class="text-danger mb-4">Удалить маршрут</h2>
 
-<div>
-    <h4>Вы уверены, что хотите удалить этот маршрут?</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-3">Название</dt>
-        <dd class="col-sm-9">@Model.Name</dd>
+    <div class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
+        <h5 class="mb-3 text-primary">@Model.Name</h5>
+        <p><strong>Откуда:</strong> @Model.StartLocation</p>
+        <p><strong>Куда:</strong> @Model.EndLocation</p>
+        <p><strong>Дистанция:</strong> @Model.DistanceKm км</p>
 
-        <dt class="col-sm-3">Начальная точка</dt>
-        <dd class="col-sm-9">@Model.StartLocation</dd>
+        @if (!string.IsNullOrEmpty(Model.MapImagePath))
+        {
+            <img src="@Model.MapImagePath" alt="Карта маршрута" class="img-fluid rounded shadow-sm mb-3" style="max-height:200px;" />
+        }
 
-        <dt class="col-sm-3">Конечная точка</dt>
-        <dd class="col-sm-9">@Model.EndLocation</dd>
+        <p class="text-muted">Вы уверены, что хотите удалить этот маршрут? Это действие необратимо.</p>
 
-        <dt class="col-sm-3">Дистанция</dt>
-        <dd class="col-sm-9">@Model.DistanceKm км</dd>
-    </dl>
-
-    <form asp-action="DeleteConfirmed">
-        <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Удалить</button>
-        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
-    </form>
+        <form asp-action="Delete" method="post" class="mt-4">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger me-3">Удалить</button>
+            <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+        </form>
+    </div>
 </div>
+
+<style>
+    .delete-container h2 {
+        font-weight: 700;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+    }
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>

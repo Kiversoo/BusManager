@@ -1,0 +1,134 @@
+@model IEnumerable<BusManager.Models.SparePart>
+
+@{
+    ViewData["Title"] = "Склад запчастей";
+    Layout = "_Layout";
+}
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Добавить запчасть</a>
+    }
+</p>
+
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Количество</th>
+            <th>Цена (₽)</th>
+            <th class="text-center">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center text-muted py-3">Нет данных</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success btn-sm">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <style>
+        /* 🌿 Общий стиль таблицы как у "Автобусов" */
+        .table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #f9fcff;
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th {
+            background: linear-gradient(90deg, #4a90e2, #70b8ff);
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+        }
+
+        .table td {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #eaeaea;
+            color: #333;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #eef6ff;
+        }
+
+        .table tr:hover {
+            background-color: #d6ebff;
+            transition: 0.2s ease;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 14px;
+        }
+
+        .btn-success.btn-sm, .btn-danger.btn-sm {
+            padding: 4px 10px;
+            font-size: 13px;
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #00c853, #00e676);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(90deg, #00b94f, #00d66b);
+        }
+
+        .btn-danger {
+            background: linear-gradient(90deg, #ff5252, #ff1744);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #e63b3b, #ff0033);
+        }
+    </style>
+}

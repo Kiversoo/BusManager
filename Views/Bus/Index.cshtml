@@ -1,0 +1,41 @@
+@model IEnumerable<BusManager.Models.Bus>
+
+@{
+    ViewData["Title"] = "Автобусы";
+    Layout = "_Layout";
+}
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Добавить автобус</a>
+    }
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Модель</th>
+            <th>Номер</th>
+            <th>Вместимость</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var bus in Model)
+    {
+        <tr>
+            <td>@bus.Model</td>
+            <td>@bus.Number</td>
+            <td>@bus.Capacity</td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@bus.Id" class="btn btn-warning btn-sm">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@bus.Id" class="btn btn-danger btn-sm">Удалить</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

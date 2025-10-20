@@ -1,0 +1,45 @@
+@model IEnumerable<BusManager.Models.Driver>
+@using Microsoft.AspNetCore.Identity
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Водители";
+    Layout = "_Layout";
+}
+
+<p>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">Добавить водителя</a>
+    }
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Номер лицензии</th>
+            <th>Опыт (лет)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var driver in Model)
+    {
+        <tr>
+            <td>@driver.Name</td>
+            <td>@driver.Phone</td>
+            <td>@driver.LicenseNumber</td>
+            <td>@driver.ExperienceYears</td>
+            <td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@driver.Id" class="btn btn-warning btn-sm">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@driver.Id" class="btn btn-danger btn-sm">Удалить</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

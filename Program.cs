@@ -7,13 +7,16 @@ using BusManager.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // ==========================
-// 🔹 Подключаем базу данных (SQLite)
+// 🔹 Подключаем базы данных (SQLite)
 // ==========================
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // ==========================
-// 🔹 Подключаем Identity с ролями
+// 🔹 Identity и роли
 // ==========================
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -27,7 +30,15 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddDefaultTokenProviders();
 
 // ==========================
-// 🔹 Добавляем MVC и Razor Pages
+// 🔹 Настройки Identity
+// ==========================
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+});
+
+// ==========================
+// 🔹 MVC и Razor Pages
 // ==========================
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -35,47 +46,65 @@ builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // ==========================
-// 🔹 Создание ролей и администратора при старте
+// 🔹 Создаём роли, админа и сидим тестовые данные
 // ==========================
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var services = scope.ServiceProvider;
 
-    string[] roles = { "Admin", "User" };
-
-    foreach (var role in roles)
+    try
     {
-        if (!await roleManager.RoleExistsAsync(role))
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var context = services.GetRequiredService<AppDbContext>();
+
+        string[] roles = { "Admin", "User" };
+        foreach (var role in roles)
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            if (!roleManager.RoleExistsAsync(role).Result)
+                roleManager.CreateAsync(new IdentityRole(role)).Wait();
+        }
+
+        string adminEmail = "admin@site.com";
+        string adminPassword = "Admin123!";
+        var adminUser = userManager.FindByEmailAsync(adminEmail).Result;
+
+        if (adminUser == null)
+        {
+            var newAdmin = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+            var result = userManager.CreateAsync(newAdmin, adminPassword).Result;
+            if (result.Succeeded)
+                userManager.AddToRoleAsync(newAdmin, "Admin").Wait();
         }
     }
-
-    // Создаём администратора, если его нет
-    string adminEmail = "admin@site.com";
-    string adminPassword = "Admin123!";
-
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
-    if (adminUser == null)
+    catch (Exception ex)
     {
-        var newAdmin = new ApplicationUser
-        {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
-        var result = await userManager.CreateAsync(newAdmin, adminPassword);
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(newAdmin, "Admin");
-        }
-    }
-    else if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
-    {
-        await userManager.AddToRoleAsync(adminUser, "Admin");
+        Console.WriteLine("❌ Ошибка при инициализации базы данных: " + ex.Message);
     }
 }
+
+// ==========================
+// 🔹 Автоматическое добавление роли User при входе
+// ==========================
+app.Use(async (context, next) =>
+{
+    if (context.User.Identity?.IsAuthenticated == true)
+    {
+        var userManager = context.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+        var user = await userManager.GetUserAsync(context.User);
+
+        if (user != null && !await userManager.IsInRoleAsync(user, "User"))
+        {
+            await userManager.AddToRoleAsync(user, "User");
+        }
+    }
+    await next();
+});
 
 // ==========================
 // 🔹 Конвейер обработки запросов

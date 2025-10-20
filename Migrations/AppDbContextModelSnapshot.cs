@@ -87,7 +87,13 @@ namespace BusManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Driver")
+                    b.Property<int>("Capacity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -95,7 +101,18 @@ namespace BusManager.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RouteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DriverId");
+
+                    b.HasIndex("RouteId");
 
                     b.ToTable("Buses");
                 });
@@ -106,10 +123,54 @@ namespace BusManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("BusId")
+                        .HasColumnType("TEXT");
+
                     b.Property<double>("DistanceKm")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("DriverId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("EndLocation")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MapImagePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RouteImagePath")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StartLocation")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BusRoutes");
+                });
+
+            modelBuilder.Entity("BusManager.Models.Driver", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ExperienceYears")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("LicenseNumber")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -117,13 +178,13 @@ namespace BusManager.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("StartLocation")
+                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Routes");
+                    b.ToTable("Drivers");
                 });
 
             modelBuilder.Entity("BusManager.Models.Part", b =>
@@ -153,14 +214,18 @@ namespace BusManager.Migrations
                     b.Property<int>("BusId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("Cost")
-                        .HasColumnType("REAL");
+                    b.Property<string>("BusNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<decimal>("Cost")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RepairDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -168,6 +233,27 @@ namespace BusManager.Migrations
                     b.HasIndex("BusId");
 
                     b.ToTable("Repairs");
+                });
+
+            modelBuilder.Entity("BusManager.Models.SparePart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpareParts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -298,10 +384,25 @@ namespace BusManager.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("BusManager.Models.Bus", b =>
+                {
+                    b.HasOne("BusManager.Models.Driver", "Driver")
+                        .WithMany("Buses")
+                        .HasForeignKey("DriverId");
+
+                    b.HasOne("BusManager.Models.BusRoute", "Route")
+                        .WithMany("Buses")
+                        .HasForeignKey("RouteId");
+
+                    b.Navigation("Driver");
+
+                    b.Navigation("Route");
+                });
+
             modelBuilder.Entity("BusManager.Models.Repair", b =>
                 {
                     b.HasOne("BusManager.Models.Bus", "Bus")
-                        .WithMany()
+                        .WithMany("Repairs")
                         .HasForeignKey("BusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -358,6 +459,21 @@ namespace BusManager.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BusManager.Models.Bus", b =>
+                {
+                    b.Navigation("Repairs");
+                });
+
+            modelBuilder.Entity("BusManager.Models.BusRoute", b =>
+                {
+                    b.Navigation("Buses");
+                });
+
+            modelBuilder.Entity("BusManager.Models.Driver", b =>
+                {
+                    b.Navigation("Buses");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,22 +1,175 @@
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
+  font-size: 16px;
   position: relative;
   min-height: 100%;
 }
 
 body {
   margin-bottom: 60px;
+  background-color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
 }
+
+/* === 🌟 Единый фирменный стиль таблиц BusManager === */
+.table {
+  width: 95%;
+  max-width: 1200px;
+  margin: 30px auto;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  background: transparent;
+}
+
+.table thead {
+  background: linear-gradient(135deg, #4a90e2, #7bc8ff);
+  color: white;
+  border-radius: 12px 12px 0 0;
+}
+
+.table thead th {
+  padding: 14px 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+}
+
+.table tbody tr {
+  background: #f8fbff;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.table tbody tr:hover {
+  transform: scale(1.01);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.table td {
+  padding: 12px 16px;
+  text-align: center;
+  border: none;
+  font-size: 15px;
+  color: #333;
+}
+
+/* Миниатюры изображений */
+.route-thumb {
+  max-height: 80px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.route-thumb:hover {
+  transform: scale(1.05);
+}
+
+/* === 🌿 Кнопки действий === */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 🟢 Добавить / Редактировать */
+.btn-success, .btn-warning, .btn-primary {
+  background: linear-gradient(90deg, #00c853, #00e676);
+  color: white;
+}
+.btn-success:hover, .btn-warning:hover, .btn-primary:hover {
+  background: linear-gradient(90deg, #00b94f, #00d66b);
+}
+
+/* 🔵 Добавить (в верхней части страницы) */
+.btn-primary {
+  background: linear-gradient(90deg, #0099ff, #33ccff);
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0088e2, #29b6f6);
+}
+
+/* 🟥 Удалить */
+.btn-danger {
+  background: linear-gradient(90deg, #ff5252, #ff1744);
+  color: white;
+}
+.btn-danger:hover {
+  background: linear-gradient(90deg, #e63b3b, #ff0033);
+}
+
+/* === 🌐 Заголовки === */
+h2, h3 {
+  text-align: center;
+  font-weight: 700;
+  color: #003366;
+  margin-bottom: 25px;
+}
+
+/* === 📋 Контейнеры === */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === 🌀 Кнопка "Назад" (единая для всех страниц) === */
+.back-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.back-circle svg {
+  fill: white;
+  transition: transform 0.25s ease;
+}
+
+.back-circle:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateX(-2px) scale(1.05);
+}
+
+.back-circle:hover svg {
+  transform: translateX(-2px);
+}
+
+/* === 🌈 Шапка страницы === */
+.page-header {
+  background: linear-gradient(135deg, #4a90e2, #6ec1ff);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 0 0 15px 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+}
+
+.logout-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+.logout-btn:hover {
+  background-color: #e43e3e;
+}
+

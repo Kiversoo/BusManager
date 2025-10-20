@@ -1,0 +1,13 @@
+@model BusManager.Models.SparePart
+
+@{
+    ViewData["Title"] = "Детали запчасти";
+}
+
+<h2>@Model.Name</h2>
+
+<p><strong>Количество:</strong> @Model.Quantity</p>
+<p><strong>Цена:</strong> @Model.Price ₽</p>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Изменить</a>
+<a asp-action="Index" class="btn btn-secondary">Назад</a>

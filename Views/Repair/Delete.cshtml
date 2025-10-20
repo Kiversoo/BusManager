@@ -1,0 +1,16 @@
+@model BusManager.Models.Repair
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Удалить ремонт";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="alert alert-warning">
+    Удалить ремонт "@Model.Description"?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Удалить</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Отмена</a>
+</form>
