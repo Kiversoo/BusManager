@@ -1,0 +1,31 @@
+@model BusManager.Models.BusRoute
+
+@{
+    ViewData["Title"] = "Удалить маршрут";
+}
+
+<h2>Удалить маршрут</h2>
+
+<div>
+    <h4>Вы уверены, что хотите удалить этот маршрут?</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Название</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Начальная точка</dt>
+        <dd class="col-sm-9">@Model.StartLocation</dd>
+
+        <dt class="col-sm-3">Конечная точка</dt>
+        <dd class="col-sm-9">@Model.EndLocation</dd>
+
+        <dt class="col-sm-3">Дистанция</dt>
+        <dd class="col-sm-9">@Model.DistanceKm км</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
