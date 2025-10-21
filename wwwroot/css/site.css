@@ -10,7 +10,7 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* === 🌟 Единый фирменный стиль таблиц BusManager === */
+
 .table {
   width: 95%;
   max-width: 1200px;
@@ -67,7 +67,7 @@ body {
   transform: scale(1.05);
 }
 
-/* === 🌿 Кнопки действий === */
+
 .btn {
   border: none;
   border-radius: 8px;
@@ -147,7 +147,7 @@ main {
   transform: translateX(-2px);
 }
 
-/* === 🌈 Шапка страницы === */
+
 .page-header {
   background: linear-gradient(135deg, #4a90e2, #6ec1ff);
   color: white;
