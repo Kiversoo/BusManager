@@ -6,18 +6,14 @@ using BusManager.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ==========================
-// 🔹 Подключаем базы данных (SQLite)
-// ==========================
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ==========================
-// 🔹 Identity и роли
-// ==========================
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -29,25 +25,19 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddDefaultUI()
 .AddDefaultTokenProviders();
 
-// ==========================
-// 🔹 Настройки Identity
-// ==========================
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true;
 });
 
-// ==========================
-// 🔹 MVC и Razor Pages
-// ==========================
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// ==========================
-// 🔹 Создаём роли, админа и сидим тестовые данные
-// ==========================
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -88,9 +78,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ==========================
-// 🔹 Автоматическое добавление роли User при входе
-// ==========================
+
 app.Use(async (context, next) =>
 {
     if (context.User.Identity?.IsAuthenticated == true)
@@ -106,9 +94,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// ==========================
-// 🔹 Конвейер обработки запросов
-// ==========================
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
